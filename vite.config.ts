@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite'
 import path from "path"
 
-import tailwindcss from '@tailwindcss/vite'
+// import tailwindcss from '@tailwindcss/vite'
 export default defineConfig({
   plugins: [
     // tailwindcss(),

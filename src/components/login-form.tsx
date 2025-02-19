@@ -10,12 +10,13 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { useNavigate } from "react-router-dom"
 
 export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRef<"div">) {
   const [email, setEmail] = useState("") // Estado para el email
   const [password, setPassword] = useState("") // Estado para la contraseña
-  console.log('email antes del submit: ', email)
-console.log('entro')
+  const navigate = useNavigate();
+  localStorage.removeItem("token");
   // Función que maneja el envío del formulario
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault() // Evita que la página se recargue
@@ -38,7 +39,13 @@ console.log('entro')
     })
     .then(data => {
       console.log("Respuesta del servidor:", data); // Maneja la respuesta del servidor
+        // ✅ Guardar el token en localStorage
+        localStorage.setItem("token", data.token);
+
+        // ✅ Redirigir al usuario al Dashboard
+        navigate("/dashboard");
     })
+    
     .catch(error => {
       console.error("Hubo un error:", error.message); // Manejo de errores
     });
