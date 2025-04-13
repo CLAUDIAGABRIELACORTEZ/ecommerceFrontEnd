@@ -13,6 +13,7 @@ import { NavMain } from "@/components/nav-main"
 import { NavProjects } from "@/components/nav-projects"
 import { NavUser } from "@/components/nav-user"
 import { TeamSwitcher } from "@/components/team-switcher"
+import { NavMainMediun } from "@/components/nav-main-mediun"
 import {
   Sidebar,
   SidebarContent,
@@ -49,7 +50,7 @@ const data = {
   ],
   navMain: [
     {
-      title: "Playground",
+      title: "Gestion De Usuario",
       url: "#",
       icon: SquareTerminal,
       isActive: true,
@@ -70,9 +71,33 @@ const data = {
     },
     
   ],
+
+  navMainMediun: [
+    {
+      title: "Inventario",
+      url: "#",
+      icon: SquareTerminal,
+      isActive: true,
+      items: [
+        {
+          title: "Productos",
+          url: "productos",
+        },
+        {
+          title: "Categorias",
+          url: "categorias",
+        },
+        {
+          title: "Permisos",
+          url: "permisoss",
+        },
+      ],
+    },
+    
+  ],
   projects: [
     {
-      name: "Design Engineering",
+      name: "Inventario",
       url: "#",
       icon: Frame,
     },
@@ -97,6 +122,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
+        <NavMainMediun items={data.navMainMediun} />
         <NavProjects projects={data.projects} />
          {/* 🔹 Agregamos el enlace a Usuarios */}
          <div className="mt-4 p-2 border-t">

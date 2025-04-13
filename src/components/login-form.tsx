@@ -1,105 +1,70 @@
-import { useState } from "react"
-import { cn } from "@/lib/utils"
+// src/components/login-form.tsx
+
+"use client"
+
 import { Button } from "@/components/ui/button"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useNavigate } from "react-router-dom"
+import { useState } from "react"
+import api from "@/lib/api" // asegúrate de que este archivo exista y esté bien configurado
 
-export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRef<"div">) {
-  const [email, setEmail] = useState("") // Estado para el email
-  const [password, setPassword] = useState("") // Estado para la contraseña
-  const navigate = useNavigate();
-  localStorage.removeItem("token");
-  // Función que maneja el envío del formulario
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault() // Evita que la página se recargue
+export function LoginForm() {
+  const navigate = useNavigate()
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [error, setError] = useState<string | null>(null)
 
-    fetch('http://localhost:8080/auth/login', {
-      method: 'POST', // Método de envío
-      headers: {
-        'Content-Type': 'application/json' // Tipo de contenido
-      },
-      body: JSON.stringify({ 
-        username: email, 
-        password: password 
-      }) // Convierte los datos a JSON
-    })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Error en la autenticación'); // Manejo de error si la respuesta no es exitosa
-      }
-      return response.json(); // Convierte la respuesta en JSON
-    })
-    .then(data => {
-      console.log("Respuesta del servidor:", data); // Maneja la respuesta del servidor
-        // ✅ Guardar el token en localStorage
-        localStorage.setItem("token", data.token);
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setError(null)
 
-        // ✅ Redirigir al usuario al Dashboard
-        navigate("/dashboard");
-    })
-    
-    .catch(error => {
-      console.error("Hubo un error:", error.message); // Manejo de errores
-    });
+    try {
+      const response = await api.post("/token/", {
+        email,
+        password,
+      })
+
+      const { access } = response.data as { access: string }
+      localStorage.setItem("token", access)
+
+      navigate("/dashboard") // o la ruta que tengas configurada
+
+    } catch (err: any) {
+      console.error(err)
+      setError("Email o contraseña incorrectos")
+    }
   }
 
   return (
-    <div className={cn("flex flex-col gap-6", className)} {...props}>
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-2xl">Login</CardTitle>
-          <CardDescription>Enter your email below to login to your account</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit}>
-            <div className="flex flex-col gap-6">
-              <div className="grid gap-2">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="m@example.com"
-                  required
-                  value={email} // Conecta el input con el estado
-                  onChange={(e) => setEmail(e.target.value)} // Actualiza el estado cuando se escribe
-                />
-              </div>
-              <div className="grid gap-2">
-                <div className="flex items-center">
-                  <Label htmlFor="password">Password</Label>
-                  <a href="#" className="ml-auto inline-block text-sm underline-offset-4 hover:underline">
-                    Forgot your password?
-                  </a>
-                </div>
-                <Input
-                  id="password"
-                  type="password"
-                  required
-                  value={password} // Conecta el input con el estado
-                  onChange={(e) => setPassword(e.target.value)} // Actualiza el estado cuando se escribe
-                />
-              </div>
-              <Button type="submit" className="w-full">
-                Login
-              </Button>
-            </div>
-            <div className="mt-4 text-center text-sm">
-              Don&apos;t have an account?{" "}
-              <a href="#" className="underline underline-offset-4">
-                Sign up
-              </a>
-            </div>
-          </form>
-        </CardContent>
-      </Card>
-    </div>
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div>
+        <Label htmlFor="email">Email</Label>
+        <Input
+          id="email"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+      </div>
+
+      <div>
+        <Label htmlFor="password">Contraseña</Label>
+        <Input
+          id="password"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+      </div>
+
+      {error && <p className="text-red-500 text-sm">{error}</p>}
+
+      <Button type="submit" className="w-full">
+        Iniciar sesión
+      </Button>
+    </form>
   )
 }

@@ -1,5 +1,11 @@
 import { useState, useEffect } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -16,55 +22,67 @@ interface CreateRoleDialogProps {
   onRoleCreated: (newRole: any) => void;
 }
 
-export default function CreateRole({ open, onClose, onRoleCreated }: CreateRoleDialogProps) {
+export default function CreateRole({
+  open,
+  onClose,
+  onRoleCreated,
+}: CreateRoleDialogProps) {
   const [roleName, setRoleName] = useState("");
   const [selectedPermissions, setSelectedPermissions] = useState<number[]>([]);
   const [permissions, setPermissions] = useState<Permission[]>([]);
 
-  // 🔹 Obtener permisos desde el backend
+  // Obtener permisos
   useEffect(() => {
     if (open) {
-      fetch("http://localhost:8080/api/permissions")
-        .then((response) => response.json())
+      fetch("http://localhost:8000/api/permissions/", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
+        .then((res) => res.json())
         .then((data: Permission[]) => setPermissions(data))
-        .catch((error) => console.error("Error al obtener permisos:", error));
+        .catch((err) => console.error("Error al obtener permisos:", err));
     }
   }, [open]);
 
-  // 🔹 Manejar selección de permisos
   const togglePermission = (id: number) => {
     setSelectedPermissions((prev) =>
-      prev.includes(id) ? prev.filter((perm) => perm !== id) : [...prev, id]
+      prev.includes(id) ? prev.filter((p) => p !== id) : [...prev, id]
     );
   };
 
-  // 🔹 Crear rol con permisos
   const handleCreateRole = () => {
     if (!roleName.trim() || selectedPermissions.length === 0) {
-      toast.error("El rol y al menos un permiso son obligatorios.");
+      toast.error("El nombre del rol y al menos un permiso son requeridos.");
       return;
     }
 
-    const newRole = { name: roleName, permission_id: selectedPermissions };
+    const newRole = {
+      name: roleName,
+      permissions: selectedPermissions, //  campo correcto para Django
+    };
 
-    fetch("http://localhost:8080/api/roles", {
+    fetch("http://localhost:8000/api/roles/create/", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
       body: JSON.stringify(newRole),
     })
-      .then((response) => {
-        if (!response.ok) throw new Error("Error al crear el rol");
-        return response.json();
+      .then((res) => {
+        if (!res.ok) throw new Error("Error al crear el rol");
+        return res.json();
       })
       .then((createdRole) => {
         onRoleCreated(createdRole);
         toast.success("Rol creado exitosamente");
-        onClose();
         setRoleName("");
         setSelectedPermissions([]);
+        onClose();
       })
-      .catch((error) => {
-        console.error("Error:", error);
+      .catch((err) => {
+        console.error("Error:", err);
         toast.error("No se pudo crear el rol");
       });
   };
@@ -76,7 +94,6 @@ export default function CreateRole({ open, onClose, onRoleCreated }: CreateRoleD
           <DialogTitle>Crear Rol</DialogTitle>
         </DialogHeader>
 
-        {/* Nombre del Rol */}
         <label className="block">
           <span className="text-sm font-medium">Nombre del Rol</span>
           <Input
@@ -86,7 +103,6 @@ export default function CreateRole({ open, onClose, onRoleCreated }: CreateRoleD
           />
         </label>
 
-        {/* Selección de Permisos */}
         <div className="mt-4">
           <span className="text-sm font-medium">Permisos</span>
           <div className="grid grid-cols-2 gap-2 mt-2">
@@ -103,8 +119,12 @@ export default function CreateRole({ open, onClose, onRoleCreated }: CreateRoleD
         </div>
 
         <DialogFooter>
-          <Button variant="outline" onClick={onClose}>Cancelar</Button>
-          <Button variant="default" onClick={handleCreateRole}>Guardar</Button>
+          <Button variant="outline" onClick={onClose}>
+            Cancelar
+          </Button>
+          <Button variant="default" onClick={handleCreateRole}>
+            Guardar
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

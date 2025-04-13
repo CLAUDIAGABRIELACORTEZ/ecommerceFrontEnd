@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/collapsible"
 import {
   SidebarGroup,
+  SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -19,7 +20,7 @@ import {
 import { Link } from "react-router-dom"
 
 
-export function NavMain({
+export function NavMainMediun({
   items,
 }: {
   items: {
@@ -34,9 +35,8 @@ export function NavMain({
   }[]
 }) {
   return (
-    
     <SidebarGroup className="p-0">
-      {/* <SidebarGroupLabel>fghdjd</SidebarGroupLabel> */}
+{/* <SidebarGroupLabel></SidebarGroupLabel> */}
       <SidebarMenu>
         {items.map((item) => (
           <Collapsible
@@ -45,7 +45,7 @@ export function NavMain({
             defaultOpen={item.isActive}
             className="group/collapsible"
           >
-            <SidebarMenuItem >
+            <SidebarMenuItem className="p-0">
               <CollapsibleTrigger asChild>
                 <SidebarMenuButton tooltip={item.title}>
                   {item.icon && <item.icon />}
@@ -54,7 +54,7 @@ export function NavMain({
                 </SidebarMenuButton>
               </CollapsibleTrigger>
               <CollapsibleContent>
-                <SidebarMenuSub >
+                <SidebarMenuSub>
                   {item.items?.map((subItem) => (
                     <SidebarMenuSubItem key={subItem.title}>
                       <SidebarMenuSubButton asChild>

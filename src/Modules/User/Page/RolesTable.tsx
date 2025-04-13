@@ -19,8 +19,9 @@ interface Permission {
 interface Role {
   id: number;
   name: string;
-  permissions: Permission[];
+  permissions_detail: Permission[]; //nombre correcto según tu API
 }
+
 
 export default function RolesTable() {
   const [roles, setRoles] = useState<Role[]>([]); // Lista de roles
@@ -32,52 +33,70 @@ export default function RolesTable() {
   const [selectedRole, setSelectedRole] = useState<Role | null>(null);
 
   const handleEditClick = (role: Role) => {
-    setSelectedRole(null); // 🔹 Reinicia para evitar errores previos
+    setSelectedRole(null); //  Reinicia para evitar errores previos
     setTimeout(() => {
       setSelectedRole(role);
-      setOpenEdit(true); // 🔹 Asegura que el modal se abra correctamente
+      setOpenEdit(true); // Asegura que el modal se abra correctamente
     }, 0);
   };
-  // 🔹 Función para abrir el diálogo de eliminación de rol
+  //  Función para abrir el diálogo de eliminación de rol
   const handleDeleteClick = (role: Role) => {
-    setSelectedRole(null); // 🔹 Reinicia para evitar errores previos
+    setSelectedRole(null); //  Reinicia para evitar errores previos
     setTimeout(() => {
       setSelectedRole(role);
-      setOpenDelete(true); // 🔹 Asegura que el modal se abra correctamente
+      setOpenDelete(true); // Asegura que el modal se abra correctamente
     }, 0);
   };
 
    
   useEffect(() => {
-    fetch("http://localhost:8080/api/permissions") // 🔹 Endpoint correcto
-      .then((response) => response.json())
+    fetch("http://localhost:8000/api/permissions/", {
+      headers: {
+        "Authorization": `Bearer ${localStorage.getItem("token")}`
+      }
+    })
+      .then((res) => res.json())
       .then((data: Permission[]) => setPermissions(data))
       .catch((error) => console.error("Error al obtener permisos:", error));
   }, []);
-
-  useEffect(() => {
-    fetchRoles();
-  }, []);
-
-  const fetchRoles = () => {
-    fetch("http://localhost:8080/api/roles")
-      .then((response) => response.json())
+  
+   const fetchRoles = () => {
+    setLoading(true); // importante para reiniciar el estado
+  
+    fetch("http://localhost:8000/api/roles/", {
+      headers: {
+        "Authorization": `Bearer ${localStorage.getItem("token")}`
+      }
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`Error HTTP: ${res.status}`);
+        }
+        return res.json();
+      })
       .then((data: Role[]) => {
         setRoles(data);
       })
-      .catch((error) => console.error("Error al obtener roles:", error))
+      .catch((error) => {
+        console.error("Error al obtener roles:", error);
+        toast.error("Error al cargar roles");
+      })
       .finally(() => setLoading(false));
   };
-
+  useEffect(() => {
+    fetchRoles(); // ✅ esto carga los roles al montar el componente
+  }, []);
+  
   const handleDeleteRole = () => {
     if (!selectedRole) return;
-
-    fetch(`http://localhost:8080/api/roles/${selectedRole.id}`, {
+    fetch(`http://localhost:8000/api/roles/delete/${selectedRole.id}/`, {
       method: "DELETE",
+      headers: {
+        "Authorization": `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json"
+      }
     })
-
-      .then((response) => {
-       
+      .then((response) => {     
         if (!response.ok) throw new Error("Error al eliminar el rol");
         setRoles(roles.filter((role) => role.id !== selectedRole.id));
         toast.success("Rol eliminado exitosamente");
@@ -119,7 +138,9 @@ export default function RolesTable() {
                 <TableRow key={role.id}>
                   <TableCell>{role.id}</TableCell>
                   <TableCell>{role.name}</TableCell>
-                  <TableCell>{role.permissions.map((p) => p.name).join(", ")}</TableCell>
+                  <TableCell>
+                      {role.permissions_detail?.map((p) => p.name).join(", ")}
+                  </TableCell>
                   <TableCell>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>

@@ -12,14 +12,16 @@ import ProtectedRoute from "./routes/ProtecteRuote";
 import PageLogin from "./app/login/page";
 import UsersTable from "./Modules/User/Page/userTable";
 import RolesTable from "./Modules/User/Page/RolesTable";
-// import PermissionsTable from "./Modules/User/Page/PermissionsTable";
+import PermissionsTable from "./Modules/User/Page/PermissionTable";
+import ProductTable from "./Modules/Inventario/Page/productsTable";
+import CategoriesTable from "./Modules/Inventario/Page/categoriesTable";
 
-import { Toaster } from "react-hot-toast"; // ✅ Importamos Toaster
+import { Toaster } from "react-hot-toast"; //  Importamos Toaster
 const AppRoutes = () => {
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
     <Router>
-      <Toaster position="bottom-right" /> {/* ✅ Agregamos Toaster aquí */}
+      <Toaster position="bottom-right" /> {/*  Agregamos Toaster aquí */}
       <Routes>
         {/* Ruta principal con el Login */}
         <Route path="/" element={<PageLogin />} />
@@ -33,7 +35,10 @@ const AppRoutes = () => {
             <Route path="settings" element={<Settings />} />
             <Route path="usuarios" element={<UsersTable />} />
             <Route path="roles" element={<RolesTable />} />
-            {/* <Route path="permisos" element={<PermissionsTable />} /> */}
+            <Route path="permisos" element={<PermissionsTable />} />
+            <Route path="productos" element={<ProductTable />} />
+            <Route path="categorias" element={<CategoriesTable />} />
+
           </Route>
         </Route>
       </Routes>

@@ -1,8 +1,9 @@
 import React from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 
 interface Role {
   id: number;
@@ -12,8 +13,7 @@ interface Role {
 interface User {
   id: number;
   username: string;
-  password: string;
-  firstname: string;
+  email: string;
   lastname: string;
   country: string;
   role_id: number;
@@ -24,7 +24,7 @@ interface EditUserDialogProps {
   onClose: () => void;
   onSave: () => void;
   user: User | null;
-  setUser: (user: User) => void;
+  setUser: React.Dispatch<React.SetStateAction<User | null>>;
   roles: Role[];
 }
 
@@ -35,48 +35,41 @@ const EditUserDialog: React.FC<EditUserDialogProps> = ({ open, onClose, onSave, 
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Editar usuario</DialogTitle>
-          <DialogDescription>Modifica los datos y guarda los cambios.</DialogDescription>
+          <DialogTitle>Editar Usuario</DialogTitle>
         </DialogHeader>
 
         <div className="space-y-4">
-          <label className="block">
-            <span className="text-sm font-medium">ID</span>
-            <Input type="text" value={user.id} disabled />
-          </label>
-
-          <label className="block">
-            <span className="text-sm font-medium">Usuario</span>
-            <Input type="text" value={user.username} onChange={(e) => setUser({ ...user, username: e.target.value })} />
-          </label>
-
-          <label className="block">
-            <span className="text-sm font-medium">Contraseña</span>
+          <div>
+            <Label>Email</Label>
             <Input
-              type="password"
-              placeholder="Dejar en blanco para no cambiar"
-              value={user.password}
-              onChange={(e) => setUser({ ...user, password: e.target.value })}
+              type="email"
+              value={user.email}
+              onChange={(e) => setUser({ ...user, email: e.target.value })}
             />
-          </label>
-
-          <label className="block">
-            <span className="text-sm font-medium">Nombre</span>
-            <Input type="text" value={user.firstname} onChange={(e) => setUser({ ...user, firstname: e.target.value })} />
-          </label>
-
-          <label className="block">
-            <span className="text-sm font-medium">Apellido</span>
-            <Input type="text" value={user.lastname} onChange={(e) => setUser({ ...user, lastname: e.target.value })} />
-          </label>
-
-          <label className="block">
-            <span className="text-sm font-medium">País</span>
-            <Input type="text" value={user.country} onChange={(e) => setUser({ ...user, country: e.target.value })} />
-          </label>
-
-          <label className="block">
-            <span className="text-sm font-medium">Rol</span>
+          </div>
+          <div>
+            <Label>Usuario</Label>
+            <Input
+              value={user.username}
+              onChange={(e) => setUser({ ...user, username: e.target.value })}
+            />
+          </div>
+          <div>
+            <Label>Apellido</Label>
+            <Input
+              value={user.lastname}
+              onChange={(e) => setUser({ ...user, lastname: e.target.value })}
+            />
+          </div>
+          <div>
+            <Label>País</Label>
+            <Input
+              value={user.country}
+              onChange={(e) => setUser({ ...user, country: e.target.value })}
+            />
+          </div>
+          <div>
+            <Label>Rol</Label>
             <Select
               value={String(user.role_id)}
               onValueChange={(value) => setUser({ ...user, role_id: parseInt(value) })}
@@ -92,15 +85,15 @@ const EditUserDialog: React.FC<EditUserDialogProps> = ({ open, onClose, onSave, 
                 ))}
               </SelectContent>
             </Select>
-          </label>
+          </div>
         </div>
 
-        <DialogFooter>
+        <DialogFooter className="pt-4">
           <Button variant="outline" onClick={onClose}>
             Cancelar
           </Button>
-          <Button variant="default" onClick={onSave}>
-            Guardar cambios
+          <Button onClick={onSave}>
+            Guardar
           </Button>
         </DialogFooter>
       </DialogContent>
