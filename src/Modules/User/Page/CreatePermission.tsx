@@ -4,6 +4,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "react-hot-toast";
+import { AppConfig } from "@/config/app-config";
 interface CreatePermissionDialogProps {
   open: boolean;
   onClose: () => void;
@@ -18,7 +19,7 @@ export default function CreatePermission({ open, onClose, onPermissionCreated }:
       return;
     }
     const newPermission = { name: permissionName };
-    fetch("http://localhost:8080/api/permissions", {
+    fetch(`${AppConfig.API_URL}/permissions`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(newPermission),

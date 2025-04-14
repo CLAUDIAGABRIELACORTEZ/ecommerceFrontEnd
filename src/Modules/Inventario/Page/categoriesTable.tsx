@@ -9,6 +9,7 @@ import { format } from "date-fns";
 import CreateCategoryDialog from "./createCategory";
 import EditCategoryDialog from "./editCategory";
 import DeleteCategoryDialog from "./deleteCategory";
+import { AppConfig } from "@/config/app-config";
 
 // Definir interfaz para Categoría
 interface Category {
@@ -31,7 +32,7 @@ export default function CategoriesTable() {
   }, []);
 
   const fetchCategories = () => {
-    fetch("http://localhost:8000/api/categories/")
+    fetch(`${AppConfig.API_URL}/categories/`)
       .then((response) => response.json())
       .then((data: Category[]) => {
         setCategories(data);
@@ -43,7 +44,7 @@ export default function CategoriesTable() {
   const handleDeleteCategory = () => {
     if (!selectedCategory) return;
 
-    fetch(`http://localhost:8000/api/categories/delete/${selectedCategory.id}/`, {
+    fetch(`${AppConfig.API_URL}/categories/delete/${selectedCategory.id}/`, {
       method: "DELETE",
     })
     

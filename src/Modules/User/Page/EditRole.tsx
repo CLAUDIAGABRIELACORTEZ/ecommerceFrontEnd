@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "react-hot-toast";
+import { AppConfig } from "@/config/app-config";
 
 interface Permission {
   id: number;
@@ -41,7 +42,7 @@ export default function EditRoleDialog({ open, onClose, role, fetchRoles }: Edit
   // Obtener lista de permisos desde el backend cuando se abre el modal
   useEffect(() => {
     if (open) {
-      fetch("http://localhost:8000/api/permissions/",{
+      fetch(`${AppConfig.API_URL}/permissions/`,{
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -70,7 +71,7 @@ export default function EditRoleDialog({ open, onClose, role, fetchRoles }: Edit
       permissions: selectedPermissions,
     };
 
-    fetch(`http://localhost:8000/api/roles/update/${role.id}/`, {
+    fetch(`${AppConfig.API_URL}/roles/update/${role.id}/`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

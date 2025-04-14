@@ -3,6 +3,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "react-hot-toast";
+import { AppConfig } from "@/config/app-config";
 
 interface Category {
   id: number;
@@ -48,7 +49,7 @@ export default function EditCategoryDialog({
       toast.error("El nombre y la descripción son obligatorios.");
       return;
     }
-    fetch(`http://localhost:8000/api/categories/update/${editedCategory.id}/`, {
+    fetch(`${AppConfig.API_URL}/categories/update/${editedCategory.id}/`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(editedCategory),

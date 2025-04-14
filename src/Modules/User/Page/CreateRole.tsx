@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "react-hot-toast";
+import { AppConfig } from "@/config/app-config";
 
 interface Permission {
   id: number;
@@ -34,7 +35,7 @@ export default function CreateRole({
   // Obtener permisos
   useEffect(() => {
     if (open) {
-      fetch("http://localhost:8000/api/permissions/", {
+      fetch(`${AppConfig.API_URL}/permissions/`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -62,7 +63,7 @@ export default function CreateRole({
       permissions: selectedPermissions, //  campo correcto para Django
     };
 
-    fetch("http://localhost:8000/api/roles/create/", {
+    fetch(`${AppConfig.API_URL}/roles/create/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

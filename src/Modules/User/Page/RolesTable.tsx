@@ -9,6 +9,7 @@ import { toast } from "react-hot-toast";
 import CreateRoleDialog from "./CreateRole";
 import EditRoleDialog from "./EditRole";
 import DeleteRoleDialog from "./DeleteRole";
+import { AppConfig } from "@/config/app-config";
 
 // 🔹 Definir interfaces
 interface Permission {
@@ -50,7 +51,7 @@ export default function RolesTable() {
 
    
   useEffect(() => {
-    fetch("http://localhost:8000/api/permissions/", {
+    fetch(`${AppConfig.API_URL}/permissions/`, {
       headers: {
         "Authorization": `Bearer ${localStorage.getItem("token")}`
       }
@@ -63,7 +64,7 @@ export default function RolesTable() {
    const fetchRoles = () => {
     setLoading(true); // importante para reiniciar el estado
   
-    fetch("http://localhost:8000/api/roles/", {
+    fetch(`${AppConfig.API_URL}/roles/`, {
       headers: {
         "Authorization": `Bearer ${localStorage.getItem("token")}`
       }
@@ -89,7 +90,7 @@ export default function RolesTable() {
   
   const handleDeleteRole = () => {
     if (!selectedRole) return;
-    fetch(`http://localhost:8000/api/roles/delete/${selectedRole.id}/`, {
+    fetch(`${AppConfig.API_URL}/roles/delete/${selectedRole.id}/`, {
       method: "DELETE",
       headers: {
         "Authorization": `Bearer ${localStorage.getItem("token")}`,

@@ -13,6 +13,7 @@ import DeleteUserDialog from "./DeleteUser";
 import EditUserDialog from "./EditUser";
 import CreateUserDialog from "./CreateUser";
 import { toast } from "react-hot-toast";
+import { AppConfig } from "@/config/app-config";
 
 
 interface Role {
@@ -54,7 +55,7 @@ export default function UsersTable() {
   });
 
   useEffect(() => {
-    fetch("http://localhost:8000/api/users/", {
+    fetch(`${AppConfig.API_URL}/users/`, {
       headers: {
         "Authorization": `Bearer ${localStorage.getItem("token")}`,
         "Content-Type": "application/json"
@@ -87,7 +88,7 @@ export default function UsersTable() {
   //   }
   // }, [openCreate, openEdit]);
   useEffect(() => {
-    fetch("http://localhost:8000/api/roles/", {
+    fetch(`${AppConfig.API_URL}/roles/`, {
       headers: {
         "Authorization": `Bearer ${localStorage.getItem("token")}`,
         "Content-Type": "application/json"
@@ -125,7 +126,7 @@ export default function UsersTable() {
     if (!selectedUser) return;
     
     setOpenDelete(false);
-    fetch(`http://localhost:8000/api/users/delete/${selectedUser.id}/`, {
+    fetch(`${AppConfig.API_URL}/users/delete/${selectedUser.id}/`, {
       method: "DELETE",
       headers: {
         "Authorization": `Bearer ${localStorage.getItem("token")}`,
@@ -155,7 +156,7 @@ export default function UsersTable() {
   
     console.log("Enviando usuario editado:", userUpdate);
   
-    fetch(`http://localhost:8000/api/users/update/${editedUser.id}/`, {
+    fetch(`${AppConfig.API_URL}/users/update/${editedUser.id}/`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -201,7 +202,7 @@ const handleCreateConfirm = () => {
     return;
   }
 
-  fetch("http://localhost:8000/api/users/create/", {
+  fetch(`${AppConfig.API_URL}/users/create/`, {
     method: "POST",
     headers: {
       "Authorization": `Bearer ${localStorage.getItem("token")}`,
@@ -219,7 +220,7 @@ const handleCreateConfirm = () => {
     .then((createdUser) => {
       console.log("Usuario creado correctamente:", createdUser);
 
-      return fetch("http://localhost:8000/api/users/", {
+      return fetch(`${AppConfig.API_URL}/users/`, {
         headers: {
           "Authorization": `Bearer ${localStorage.getItem("token")}`,
           "Content-Type": "application/json"

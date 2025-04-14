@@ -4,6 +4,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "react-hot-toast";
+import { AppConfig } from "@/config/app-config";
 
 interface Category {
   id: number;
@@ -39,7 +40,7 @@ export default function CreateProduct({ open, onClose, onProductCreated }: Creat
   };
 
   useEffect(()=>{
-    fetch("http://localhost:8000/api/categories/", {
+    fetch(`${AppConfig.API_URL}/categories/`, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
       // body: JSON.stringify(product),
@@ -63,7 +64,7 @@ export default function CreateProduct({ open, onClose, onProductCreated }: Creat
       return;
     }
 
-    fetch("http://localhost:8000/api/products/create/", {
+    fetch(`${AppConfig.API_URL}/products/create/`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(product),

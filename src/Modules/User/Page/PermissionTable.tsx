@@ -8,6 +8,7 @@ import { toast } from "react-hot-toast";
 import CreatePermissionDialog  from "./CreatePermission";
 import EditPermissionDialog from "./EditPermission";
 import DeletePermissionDialog from "./DeletePermission";
+import { AppConfig } from "@/config/app-config";
 //  Definir interfaces
 
 interface Permission {
@@ -43,7 +44,7 @@ export default function PermissionsTable() {
   }, []);
   //Lista de los permisos
   const fetchPermissions= () => {
-    fetch("http://localhost:8000/api/permissions/")
+    fetch(`${AppConfig.API_URL}/permissions/`)
       .then((response) => response.json())
       .then((data: Permission[]) => {
         setPermission(data);
@@ -54,7 +55,7 @@ export default function PermissionsTable() {
 
   const handleDeletePermission = () => {
     if (!selectedPermission) return;
-    fetch(`http://localhost:8000/api/permissions/${selectedPermission.id}`, {
+    fetch(`${AppConfig.API_URL}/permissions/${selectedPermission.id}`, {
       method: "DELETE",
     })
       .then((response) => {

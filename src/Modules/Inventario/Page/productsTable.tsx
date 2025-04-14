@@ -7,6 +7,7 @@ import { toast } from "react-hot-toast";
 import CreateProductDialog from "./createProduct";
 import EditProductDialog from "./editProduct";
 import DeleteProductDialog from "./deleteProduct";
+import { AppConfig } from "@/config/app-config";
 
 interface Category {
   id: number;
@@ -40,7 +41,7 @@ export default function ProductsTable() {
   }, []);
    
   const fetchProducts = () => {
-    fetch("http://localhost:8000/api/products/")
+    fetch(`${AppConfig.API_URL}/products/`)
       .then((response) => response.json())
       .then((data: Product[]) => {
         setProducts(data);
@@ -49,7 +50,7 @@ export default function ProductsTable() {
       .finally(() => setLoading(false));
   };
   const fetchCategories = () => {
-    fetch("http://localhost:8000/api/categories/")
+    fetch(`${AppConfig.API_URL}/categories/`)
       .then((response) => response.json())
       .then((data: Category[]) => {
         setCategories(data);
@@ -60,7 +61,7 @@ export default function ProductsTable() {
   const handleDeleteProduct = () => {
     if (!selectedProduct) return;
   
-    fetch(`http://localhost:8000/api/products/delete/${selectedProduct.id}/`, {
+    fetch(`${AppConfig.API_URL}/products/delete/${selectedProduct.id}/`, {
       method: "DELETE",
     })
       .then((response) => {

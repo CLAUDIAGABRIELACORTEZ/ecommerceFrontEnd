@@ -2,10 +2,10 @@ import * as React from "react"
 import {
   AudioWaveform,
   Command,
-  Frame,
+  // Frame,
   GalleryVerticalEnd,
-  Map,
-  PieChart,
+  // Map,
+  // PieChart,
   SquareTerminal,
 } from "lucide-react"
 
@@ -96,21 +96,7 @@ const data = {
     
   ],
   projects: [
-    {
-      name: "Inventario",
-      url: "#",
-      icon: Frame,
-    },
-    {
-      name: "Sales & Marketing",
-      url: "#",
-      icon: PieChart,
-    },
-    {
-      name: "Travel",
-      url: "#",
-      icon: Map,
-    },
+    
   ],
 }
 

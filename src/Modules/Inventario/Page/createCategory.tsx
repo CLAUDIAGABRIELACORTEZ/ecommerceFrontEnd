@@ -3,6 +3,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "react-hot-toast";
+import { AppConfig } from "@/config/app-config";
 
 interface CreateCategoryDialogProps {
   open: boolean;
@@ -27,7 +28,7 @@ export default function CreateCategory({ open, onClose, onCategoryCreated }: Cre
       return;
     }
 
-    fetch("http://localhost:8000/api/categories/create/", {
+    fetch(`${AppConfig.API_URL}/api/categories/create/`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(category),

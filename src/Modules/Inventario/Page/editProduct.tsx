@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "react-hot-toast";
 import { Product } from "./productsTable";
+import { AppConfig } from "@/config/app-config";
 
 interface Category {
   id: number;
@@ -28,7 +29,7 @@ export default function EditProductDialog({ open, onClose, product, fetchProduct
     }
 
     // Cargar categorías
-    fetch("http://localhost:8000/api/categories/")
+    fetch(`${AppConfig.API_URL}/categories/`)
       .then((response) => response.json())
       .then((data: Category[]) => setCategories(data))
       .catch((error) => {
@@ -58,7 +59,7 @@ export default function EditProductDialog({ open, onClose, product, fetchProduct
       toast.error("El nombre, precio, stock y categoría son obligatorios.");
       return;
     }
-    fetch(`http://localhost:8000/api/products/update/${editedProduct.id}/`, {
+    fetch(`${AppConfig.API_URL}/products/update/${editedProduct.id}/`, {
       method: "PUT",
       headers: {
         "Authorization": `Bearer ${localStorage.getItem("token")}`,

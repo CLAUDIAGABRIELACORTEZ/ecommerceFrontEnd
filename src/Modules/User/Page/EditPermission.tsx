@@ -3,6 +3,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "react-hot-toast";
+import { AppConfig } from "@/config/app-config";
 
 interface Permission {
   id: number;
@@ -36,7 +37,7 @@ export default function EditPermissionDialog({ open, onClose, permission, fetchP
 
     const updatedPermission = { id: permission.id, name: permissionName };
 
-    fetch(`http://localhost:8080/api/permissions/${permission.id}`, {
+    fetch(`${AppConfig.API_URL}/permissions/${permission.id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(updatedPermission),
