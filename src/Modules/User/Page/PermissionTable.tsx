@@ -43,15 +43,27 @@ export default function PermissionsTable() {
     fetchPermissions();
   }, []);
   //Lista de los permisos
-  const fetchPermissions= () => {
-    fetch(`${AppConfig.API_URL}/permissions/`)
-      .then((response) => response.json())
-      .then((data: Permission[]) => {
-        setPermission(data);
-      })
+  // const fetchPermissions= () => {
+  //   fetch(`${AppConfig.API_URL}/permissions/`)
+  //     .then((response) => response.json())
+  //     .then((data: Permission[]) => {
+  //       setPermission(data);
+  //     })
+  //     .catch((error) => console.error("Error al obtener permisos:", error))
+  //     .finally(() => setLoading(false));
+  // };
+
+    const fetchPermissions= () => {
+    fetch(`${AppConfig.API_URL}/permissions/`, {
+      headers: {
+        "Authorization": `Bearer ${localStorage.getItem("token")}`
+      }
+    })
+      .then((res) => res.json())
+      .then((data: Permission[]) => setPermission(data))
       .catch((error) => console.error("Error al obtener permisos:", error))
       .finally(() => setLoading(false));
-  };
+     };
 
   const handleDeletePermission = () => {
     if (!selectedPermission) return;

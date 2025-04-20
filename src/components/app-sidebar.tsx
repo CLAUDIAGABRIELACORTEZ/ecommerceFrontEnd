@@ -1,53 +1,18 @@
-import * as React from "react"
-import {
-  AudioWaveform,
-  Command,
-  // Frame,
-  GalleryVerticalEnd,
-  // Map,
-  // PieChart,
-  SquareTerminal,
-} from "lucide-react"
+import * as React from "react";
+import { GalleryVerticalEnd, SquareTerminal } from "lucide-react";
 
-import { NavMain } from "@/components/nav-main"
-import { NavProjects } from "@/components/nav-projects"
-import { NavUser } from "@/components/nav-user"
-import { TeamSwitcher } from "@/components/team-switcher"
-import { NavMainMediun } from "@/components/nav-main-mediun"
+import { NavMain } from "@/components/nav-main";
+import { NavMainMediun } from "@/components/nav-main-mediun";
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
   SidebarRail,
-} from "@/components/ui/sidebar"
-import LogoutButton from "./siderbar"
-import { Link } from "react-router-dom"
+} from "@/components/ui/sidebar";
+// import LogoutButton from "@/app/dashboard/siderbar"; // Asegúrate que exista
 
-// This is sample data.
 const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
-  teams: [
-    {
-      name: "Acme Inc",
-      logo: GalleryVerticalEnd,
-      plan: "Enterprise",
-    },
-    {
-      name: "Acme Corp.",
-      logo: AudioWaveform,
-      plan: "Startup",
-    },
-    {
-      name: "Evil Corp.",
-      logo: Command,
-      plan: "Free",
-    },
-  ],
   navMain: [
     {
       title: "Gestion De Usuario",
@@ -55,23 +20,12 @@ const data = {
       icon: SquareTerminal,
       isActive: true,
       items: [
-        {
-          title: "Usuarios",
-          url: "usuarios",
-        },
-        {
-          title: "Roles",
-          url: "roles",
-        },
-        {
-          title: "Permisos",
-          url: "permisos",
-        },
+        { title: "Usuarios", url: "usuarios" },
+        { title: "Roles", url: "roles" },
+        { title: "Permisos", url: "permisos" },
       ],
     },
-    
   ],
-
   navMainMediun: [
     {
       title: "Inventario",
@@ -79,49 +33,41 @@ const data = {
       icon: SquareTerminal,
       isActive: true,
       items: [
-        {
-          title: "Productos",
-          url: "productos",
-        },
-        {
-          title: "Categorias",
-          url: "categorias",
-        },
-        {
-          title: "Permisos",
-          url: "permisoss",
-        },
+        { title: "Productos", url: "productos" },
+        { title: "Categorias", url: "categorias" },
+        { title: "Reportes de Producto", url: "reporte-productos" },
+        { title: "Reportes de cliente", url: "reporte-compras-cliente" },
       ],
     },
-    
   ],
-  projects: [
-    
-  ],
-}
+};
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
-    <Sidebar collapsible="icon" {...props}>
+    <Sidebar
+      collapsible="icon"
+      {...props}
+      className="bg-gradient-to-b from-red-800 to-red-900 text-white shadow-xl"
+    >
       <SidebarHeader>
-        <TeamSwitcher teams={data.teams} />
-      </SidebarHeader>
-      <SidebarContent>
-        <NavMain items={data.navMain} />
-        <NavMainMediun items={data.navMainMediun} />
-        <NavProjects projects={data.projects} />
-         {/* 🔹 Agregamos el enlace a Usuarios */}
-         <div className="mt-4 p-2 border-t">
-          <Link to="/dashboard/usuarios" className="block py-2 text-sm hover:bg-gray-200">
-            Usuarios
-          </Link>
+        <div className="flex items-center gap-2 text-xl font-bold px-4 py-4 tracking-wide">
+          <GalleryVerticalEnd className="w-8 h-8 text-white" />
+          <span>Electronic</span>
         </div>
+        <hr className="border-white/20 my-2" />
+      </SidebarHeader>
+
+      <SidebarContent className="space-y-2 px-2">
+        <NavMain items={data.navMain} />
+        <hr className="border-white/20 my-2" />
+        <NavMainMediun items={data.navMainMediun} />
       </SidebarContent>
-      <SidebarFooter>
-        <NavUser user={data.user} />
-        <LogoutButton />
+
+      <SidebarFooter className="px-4 pb-4 mt-auto">
+        {/* <LogoutButton /> */}
       </SidebarFooter>
+
       <SidebarRail />
     </Sidebar>
-  )
+  );
 }

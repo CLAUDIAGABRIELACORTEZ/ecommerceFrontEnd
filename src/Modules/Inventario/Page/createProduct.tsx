@@ -26,6 +26,7 @@ export default function CreateProduct({ open, onClose, onProductCreated }: Creat
     description: "",
     size: "",
     stock: 0,
+    stock_minimo: 5, // nuevo campo editable
     price: 0,
     brand: "",
     category: null as number | null, // Asegúrate de que 'category' esté presente
@@ -35,7 +36,7 @@ export default function CreateProduct({ open, onClose, onProductCreated }: Creat
     const { name, value } = e.target;
     setProduct((prev) => ({
       ...prev,
-      [name]: name === "category" || name === "price" || name === "stock" ? Number(value) : value,
+      [name]: name === "category" || name === "price" || name === "stock_minimo"|| name === "stock" ? Number(value) : value,
     }));    
   };
 
@@ -59,7 +60,7 @@ export default function CreateProduct({ open, onClose, onProductCreated }: Creat
   }, [])
 
   const handleCreateProduct = () => {
-    if (!product.name.trim() || product.price == null || product.stock == null || product.category == null) {
+    if (!product.name.trim() || product.price == null || product.stock == null || product.category == null || product.stock_minimo == null ) {
       toast.error("El nombre, precio, stock y categoría son obligatorios.");
       return;
     }
@@ -77,7 +78,7 @@ export default function CreateProduct({ open, onClose, onProductCreated }: Creat
         onProductCreated(createdProduct);
         toast.success("Producto creado exitosamente");
         onClose();
-        setProduct({ image: "", name: "", description: "", size: "", stock: 0, price: 0, brand: "", category:0 });
+        setProduct({ image: "", name: "", description: "", size: "", stock: 0, stock_minimo : 5, price: 0, brand: "", category:0 });
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -123,6 +124,11 @@ export default function CreateProduct({ open, onClose, onProductCreated }: Creat
         <label className="block">
           <span className="text-sm font-medium">Stock</span>
           <Input type="number" name="stock" value={product.stock} onChange={handleChange} />
+        </label>
+
+        <label className="block">
+          <span className="text-sm font-medium">Stock mínimo</span>
+          <Input type="number"name="stock_minimo" value={product.stock_minimo} onChange={handleChange} />
         </label>
 
         <label className="block">

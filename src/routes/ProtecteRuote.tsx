@@ -6,7 +6,7 @@ const ProtectedRoute = () => {
 
     // 🔹 Si no hay token o está expirado, redirigir al Login
     if (!token || isTokenExpired()) {
-      localStorage.removeItem("token"); // ✅ Borra el token solo si está expirado
+      localStorage.removeItem("token"); //  Borra el token solo si está expirado
       return <Navigate to="/" replace />;
     }
 

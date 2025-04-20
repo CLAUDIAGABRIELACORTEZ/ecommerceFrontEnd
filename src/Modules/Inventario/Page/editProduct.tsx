@@ -46,7 +46,7 @@ export default function EditProductDialog({ open, onClose, product, fetchProduct
         ...prev,
         [name]: name === "category"
           ? { id: Number(value), name: "", description: "" }  // solo usamos el ID
-          : name === "price" || name === "stock"
+          : name === "price" || name === "stock"|| name === "stock_minimo"
           ? Number(value)
           : value,
       };
@@ -155,7 +155,16 @@ export default function EditProductDialog({ open, onClose, product, fetchProduct
             onChange={handleChange}
           />
         </label>
-
+            {/* Stock minimo*/}
+        <label className="block">
+              <span className="text-sm font-medium">Stock mínimo</span>
+              <Input
+                type="number"
+                name="stock_minimo"
+                value={editedProduct?.stock_minimo || 0}
+                onChange={handleChange}
+              />
+            </label>
         {/* Precio */}
         <label className="block">
           <span className="text-sm font-medium">Precio</span>

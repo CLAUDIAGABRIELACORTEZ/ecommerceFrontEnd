@@ -22,6 +22,7 @@ export interface Product {
   description: string;
   size: string;
   stock: number;
+  stock_minimo:number;
   price: number;
   brand: string;
   category: Category; // Agregamos la categoría
@@ -42,6 +43,7 @@ export default function ProductsTable() {
    
   const fetchProducts = () => {
     fetch(`${AppConfig.API_URL}/products/`)
+    
       .then((response) => response.json())
       .then((data: Product[]) => {
         setProducts(data);
@@ -112,6 +114,7 @@ export default function ProductsTable() {
               <TableHead>Descripción</TableHead>
               <TableHead>Tamaño</TableHead>
               <TableHead>Stock</TableHead>
+              <TableHead>Stock Minimo</TableHead>
               <TableHead>Precio</TableHead>
               <TableHead>Marca</TableHead>
               <TableHead>Categoría</TableHead>
@@ -128,7 +131,8 @@ export default function ProductsTable() {
                   <TableCell>{product.description}</TableCell>
                   <TableCell>{product.size}</TableCell>
                   <TableCell>{product.stock}</TableCell>
-                  <TableCell>${product.price}</TableCell>
+                  <TableCell>{product.stock_minimo}</TableCell>
+                  <TableCell>{product.price}</TableCell>
                   <TableCell>{product.brand}</TableCell>
                   <TableCell>{product.category.name}</TableCell>
                   <TableCell>
